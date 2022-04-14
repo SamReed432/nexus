@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Nexus Movie Reviewer</title>
+</head>
+
+<body>
+<h1>Nexus Movie Reviewer Pro v.1</h1>
+	
+<script>
+	
+		var connectionString = "mongodb+srv://nexus:1234@nexusmovies.ka2cn.mongodb.net/reviews?retryWrites=true&w=majority";
+	MongoClientSettings settings = MongoClientSettings.builder()
+        .applyConnectionString(connectionString)
+        .serverApi(ServerApi.builder()
+            .version(ServerApiVersion.V1)
+            .build())
+        .build();
+	MongoClient mongoClient = MongoClients.create(settings);
+	MongoDatabase database = mongoClient.getDatabase("test");
+
+</script>
+</body>
+</html>
