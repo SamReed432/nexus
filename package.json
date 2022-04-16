@@ -1,0 +1,19 @@
+{
+  "name": "nexus",
+  "version": "1.0.0",
+  "description": "node app ",
+  "main": "test.js",
+  "scripts": {
+  "start": "node test.js"
+},
+  "repository": {
+  "type": "git",
+  "url": ""
+},
+  "author": "Sam Reed",
+  "license": "ISC",
+  "bugs": {
+  "url": ""
+},
+  "homepage": ""
+}
