@@ -1,10 +1,12 @@
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.write('Hello World!');
-console.log("Server Setup: Sucess");
-	
+const http = require('http');
+const port = process.env.PORT || 3000
 
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html');
+  res.end('<h1>Hello World</h1>');
+	
+/*
 var mongo=require('mongodb');
 var MongoClient=mongo.MongoClient;
 var url = "mongodb+srv://nexus:nexus@nexusmovies.ka2cn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -25,13 +27,15 @@ MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
 		}
 	})
    });
-	
+*/
 	
 	
 	
 	
 
 	
-	
-  res.end();
-}).listen(8080);
+});
+
+server.listen(port,() => {
+  console.log(`Server running at port `+port);
+});
