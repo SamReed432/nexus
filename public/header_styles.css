@@ -9,10 +9,9 @@ body {
 
 header {
 	width: 100%;
-	background-color: rgba(116,29,144,0.13);
+	background-image: linear-gradient(to right, #7CB9E8 , #c09cfa);
 	margin: 0;
 	padding: 0;
-	position: fixed;
 }
 
 #nav_box {
@@ -26,17 +25,21 @@ header {
 	flex-grow: 1;
 	padding-left: 5%;
 	padding-right: 5%;
-	padding-bottom: 2%;
-	padding-top: 2%;
+	padding-bottom: 1%;
+	padding-top: 1%;
 	border: #B0B0B0 0.05vw;
-	border-style: solid none none solid;
+	border-style: solid solid none solid;
 	margin: 0%;
 	text-align: center;
 	transition: 0.3s;
 	width: 25%;
 	font-family: 'Raleway', sans-serif;
-	font-weight: bold;
+	font-weight: 900;
+	font-size: 1.5vw;
 	vertical-align: middle;
+	text-decoration: none;
+	color: #ECF2FF;
+	text-shadow: 1px 1px 1px gray;
 }
 
 .nav_link:hover {
@@ -47,8 +50,9 @@ header {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	justify-content: space-evenly;
-	padding: 1%
+	justify-content: space-between;
+	padding: 1%;
+	padding-bottom: 0%;
 }
 
 #site_name {
@@ -56,17 +60,24 @@ header {
 	font-family: 'Raleway', sans-serif;
 	justify-content: center;
 	align-content: center;
+	color: #ECF2FF;
+	text-decoration: none;
+	padding-left: 35%;
 	
+}
+
+a {
+	text-decoration: none;
 }
 
 #x_span {
 	font-size:3.3vw;
-	margin-top: -0.63%;
+	margin-top: -3.63%;
 }
 
 #search_icon {
-	width: 6.5%;
-	height: 6.5%;
+	width: 2vw;
+	height: 2vw;
 	margin-right: 2.5%;
 }
 
@@ -94,7 +105,6 @@ header {
 #search_input {
 	width: 0px;
 	opacity: 0%;
-	height: 110%;
 	transition: all .5s ease-in-out;
 	background-color: rgba(83,78,143,0.25);
 	border: rgba(83,83,83,0.73) solid 0.2vw;

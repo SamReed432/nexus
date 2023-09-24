@@ -1,0 +1,50 @@
+h2 {
+		color:red;
+	}
+	h1 {
+		color: white;
+		text-align: center;
+		margin-top: -30px;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 800;
+	}
+	form {
+		text-align: center;
+		padding: 40px;
+		padding-top: 20px;
+	}
+	#button2 {
+		text-align: center;
+		padding: 10px;
+	}
+	input {
+		padding: 20px;
+		margin: 10px;
+	}
+	button{
+		padding: 10px;
+		margin: 10px;
+		border-radius: 12px;
+		background-color: rgba(170,170,170,1.00);
+		font-size: 20px;
+	}
+	#main {
+		background-color: rgba(53,53,53,1.00);
+		margin-left: 5%;
+		margin-right: 5%;
+		margin-top: 3%;
+	}
+	body {
+		background-color: rgba(33,6,68,0.72);
+	}
+	h3 {
+		text-align: center;
+		font-size: 60px;
+		color: rgba(192,190,190,1.00);
+		padding-top: 30px;
+	}
+	
+	.poster {
+		width: 8%;
+		height: auto;
+	}

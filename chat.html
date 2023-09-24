@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>User</title>
+	
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+
+<style>
+	h2 {
+		color:red;
+	}
+	h1 {
+		color: #3E54AC;
+		text-align: center;
+		margin-top: -30px;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 800;
+	}
+	
+	#main {
+		background-color: rgba(191,172,226,0.20);
+		margin-left: 5%;
+		margin-right: 5%;
+		margin-top: 3%;
+		display: flex;
+		flex-direction: column;
+	}
+	body {
+		background-color: #ECF2FF;;
+	}
+	h3 {
+		text-align: center;
+		font-size: 60px;
+		color: rgba(97,36,132,1.00);
+		padding-top: 30px;
+	}
+	
+	.poster {
+		display: flex;
+		align-content: left;
+		width: 10vw;
+		padding-left: 2%;
+		float: left;
+	}
+	
+	.movie_box {
+		width: 46%;
+		margin-left: 2%;
+		margin-right: 2%;
+		margin-top: 2%;
+		padding: 2%;
+		border: #3E54AC medium solid;
+		color: #3E54AC;
+		font-family: 'Montserrat', sans-serif;
+		font-family: 'Varela Round', sans-serif;
+	}
+	.movie_row {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.top_info {
+		display: block;
+		float: left;
+		flex-direction: row;
+		width: 100%;
+	}
+	
+	.name_num {
+		display: flex;
+		flex-direction: row;
+		float: left;
+	}
+	
+	.linfo {
+		display: flex;
+		flex-direction: column;
+		float: left;
+		width: 70%;
+	}
+	
+	body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+
+	
+</style>
+
+<link rel="stylesheet" href="header_styles.css">
+
+</head>
+	
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><a href="/"><img id="nexus_logo" alt="nexus logo" src="camera.png"></a></div>
+		<a href="/"><div id="site_name">NE<span id="x_span">X</span>US</div></a>
+		<div id="search_box">
+			<form action="/movie_page" method="POST">
+			<img alt="search" src="search.png" id="search_icon" class="open_search">
+				<input name="name" id="search_input" type="text">
+			</form>
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link">Top Films</a>
+		<a class="nav_link">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link" href="/login">My Account</a>
+	</div>
+	
+</header>
+	
+<body>
+	<ul id="messages"></ul>
+		<form id="form" action="">
+		  <input id="input" autocomplete="off" /><button>Send</button>
+		</form>
+	
+<script src="socket.io.js"></script>
+<script>
+	
+	const username = getCookie("user");
+	
+  const socket = io({
+	  headers: {
+		  'user': username
+	  }
+  });
+	
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value) {
+      socket.emit('chat message', { username: username, message: input.value });
+      input.value = '';
+    }
+  });
+	
+	socket.on('chat message', (msg) => {
+		const item = document.createElement('li');
+		item.textContent = msg.username + ": " + msg.msg.message;
+		messages.appendChild(item);
+		window.scrollTo(0,document.body.scrollHeight);
+	})
+	
+	
+	function getCookie(cname) {
+	  let name = cname + "=";
+	  let decodedCookie = decodeURIComponent(document.cookie);
+	  let ca = decodedCookie.split(';');
+	  for(let i = 0; i <ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+			  c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			  return c.substring(name.length, c.length);
+			}
+	  }
+	  return "";
+}
+</script>
+</body>
+</html>

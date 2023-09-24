@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:wght@500&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" href="header_styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<title>Nexus Movies</title>
+<style>
+	body {
+		font-family: 'Quicksand', sans-serif;
+		max-width: 100%;
+		overflow: scroll;
+	}
+	
+	h2 {
+		color:red;
+	}
+	h1 {
+		color: #3E54AC;
+		text-align: center;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 800;
+	}
+	
+	#films {
+		background-color: rgba(191,172,226,0.20);
+		margin-left: 5%;
+		margin-right: 5%;
+		margin-top: 3%;
+		display: flex;
+		flex-direction: column;
+	}
+	body {
+		background-color: #ECF2FF;;
+	}
+	h3 {
+		text-align: center;
+		font-size: 60px;
+		color: rgba(97,36,132,1.00);
+		padding-top: 30px;
+	}
+	
+	.poster {
+		display: flex;
+		align-content: left;
+		width: 5vw;
+		float: left;
+	}
+	
+	.movie_box {
+		width: 45%;
+		margin-left: 2%;
+		margin-right: 2%;
+		margin-top: 2%;
+		padding: 1vw;
+		border: #3E54AC medium solid;
+		color: #3E54AC;
+		font-family: 'Montserrat', sans-serif;
+		font-family: 'Varela Round', sans-serif;
+	}
+	.movie_row {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+	
+	.top_info {
+		display: block;
+		float: left;
+		flex-direction: row;
+		width: 100%;
+	}
+	
+	.name_num {
+		display: flex;
+		flex-direction: row;
+		float: left;
+	}
+	
+	.linfo {
+		display: flex;
+		flex-direction: column;
+		float: left;
+		width: 70%;
+	}
+	
+	#arrows {
+		display: flex;
+		align-content: center;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 3vw;
+	}
+	
+</style>
+</head>
+	
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><a href="/"><img id="nexus_logo" alt="nexus logo" src="camera.png"></a></div>
+		<a href="/"><div id="site_name">NE<span id="x_span">X</span>US</div></a>
+		<div id="search_box">
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link" href="/top_films">Top Films</a>
+		<a class="nav_link" href="/lists">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link" href="/login">My Account</a>
+	</div>
+	
+</header>
+
+<body>
+<h1>Edit Your List:</h1>
+	
+<form>
+	<label for="list_name">List Name:</label><input type="text" id="list_name">
+	<label for="list_description">List Description:</label><textarea type="textarea" id="list_description">	</textarea>
+	
+</form>
+<button id="saveChages"> Save Changes </button>
+	
+	<div id="search_list_box">
+			<form action="/list_search" method="POST">
+				<input name="name" id="search_input2" type="text">
+			</form>
+		</div>
+	
+	<div id="films"></div>
+	
+<script>
+	var list_id = getQueryVariable('list_id');
+	
+	async function get_list_info (){
+		url = 'http://localhost:3000/get_list_info';
+				const res = await fetch(url, {
+				method: 'GET',
+				headers: {
+					list_id: list_id,
+				}
+				});
+		const list = await res.json();
+		console.log(list);
+		
+		
+		document.getElementById("list_name").value = list.title;
+		document.getElementById("list_description").value = list.description;
+		for (var i = 0; i < list.movies.length; i++){
+			await addMovie(list.movies[i], i);
+		}
+		
+		
+		
+	}
+	
+	async function addMovie(mov_num, num){
+		await get_movie(mov_num, num);
+	}
+	
+	async function get_movie(mov_num, num){
+			const url = 'http://localhost:3000/search_movies?id=' + mov_num;
+			const res = await fetch(url,
+							   {
+				method: 'GET',
+			})
+			const data = await res.json();
+			
+				var movie = JSON.parse(data);
+				var img_url1 =  "https://image.tmdb.org/t/p/original" + await movie.poster_path;
+				
+				var title1 = await movie.title;
+				var release_date = await movie.release_date;
+				var overview = await movie.overview;
+				var id1 = await movie.id;
+		
+				document.getElementById("films").innerHTML += "<div class='movie_row' css='order:" + num + 1 + "'>" + 
+					"<a class='movie_box'><div class='top_info'><div class='linfo'>" + "<div class='name_num'>" +
+					"<p>&nbsp" + await title1 + "</p></div>" + 
+					"<p>Relase Date:" + await release_date + "</p></div>" + 
+					" <img class='poster' src='" + img_url1 + "'></div>" + "<button onclick= 'rem_button(" + id1 + ")' class='delete_button'>DELETE</button>" +
+					"</a><div id='arrows'><span onclick='swap_button_up(" + id1 + ")' id='up_arrow'>&#8593;</span><span onclick='swap_button_down(" + id1 + ")' id='down_arrow'>&#8595;</span></div></div>";
+		
+	
+	}
+	
+	
+	function getQueryVariable(variable) {
+		var query = window.location.search.substring(1);
+		var vars = query.split('&');
+		for (var i = 0; i < vars.length; i++) {
+			var pair = vars[i].split('=');
+			if (decodeURIComponent(pair[0]) == variable) {
+				return decodeURIComponent(pair[1]);
+			}
+    }
+    console.log('Query variable %s not found', variable);
+}
+
+	
+	get_list_info();
+	
+	document.getElementById("saveChages").addEventListener("click", function() {
+		console.log("clicked");
+		var url = 'http://localhost:3000/update_list_info';
+		const res = fetch(url, {
+				method: 'GET',
+				headers: {
+					list_id: list_id,
+					list_title: document.getElementById('list_name').value,
+					list_description: document.getElementById('list_description').value,
+				}
+			})
+	});
+	
+	function rem_button(id) {
+			console.log("called rem_buttoN");
+			const url = 'http://localhost:3000/rem_movToList';
+			const res = fetch(url, {
+				mothod: 'POST',
+				headers: {
+					mov_id: id
+				}
+			})
+	};
+	
+	function swap_button_up(id, dir) {
+			console.log("called Swap UP");
+			const url = 'http://localhost:3000/swap_list_order';
+			const res = fetch(url, {
+				mothod: 'POST',
+				headers: {
+					mov_id: id,
+					direction: "up",
+				}
+			});
+		sleep(50).then (() => {
+			document.getElementById("films").innerHTML = "";
+			get_list_info();	
+		});
+	};
+	
+	async function swap_button_down(id, dir) {
+			console.log("called Swap DOWN");
+			const url = 'http://localhost:3000/swap_list_order';
+			const res = fetch(url, {
+				mothod: 'POST',
+				headers: {
+					mov_id: id,
+					direction: "down",
+				}
+			});
+		sleep(50).then (() => {
+			document.getElementById("films").innerHTML = "";
+			get_list_info();	
+		});
+	};
+	
+	function sleep(ms) {
+  		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+
+	
+	
+</script>
+	
+</body>
+</html>

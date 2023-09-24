@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:wght@500&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" href="header_styles.css">
+	<title>Nexus Movies</title>
+<style>
+	body {
+		font-family: 'Quicksand', sans-serif;
+		max-width: 100%;
+		overflow: scroll;
+	}
+</style>
+</head>
+	
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><a href="/"><img id="nexus_logo" alt="nexus logo" src="camera.png"></a></div>
+		<a href="/"><div id="site_name">NE<span id="x_span">X</span>US</div></a>
+		<div id="search_box">
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link" href="/top_films">Top Films</a>
+		<a class="nav_link" href="/lists">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link" href="/login">My Account</a>
+	</div>
+	
+</header>
+
+<body>
+<h1>User's Lists:</h1>
+	
+<a id="new_list_button" href="/new_list">Add A New List!</a>
+	
+<div id="listlist"></div>
+	
+<script>
+	async function get_lists(){
+			url = 'http://localhost:3000/get_lists';
+			const res = await fetch(url,
+							   {
+				method: 'GET',
+				query: 0,
+			})
+
+			const data = await res.json();
+			if (data == null) return;
+			console.log(data);
+		
+			await data.forEach(list => {
+				console.log("List: " + list);
+				get_title(list);
+			});
+	};
+	
+	async function get_title(list){
+		url = 'http://localhost:3000/get_listTitle';
+				const res = await fetch(url,
+							   {
+				method: 'GET',
+				headers: {
+					list_id: list,
+				}
+			});
+				list = await res.json();
+				console.log(list.title);
+				document.getElementById('listlist').innerHTML += "<a href='/list_editor?list_id=" + await list._id + "'>" + await list.title + "<br>";
+	}
+	
+	get_lists();
+
+</script>
+	
+</body>
+</html>

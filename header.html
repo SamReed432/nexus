@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>header</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="header_styles.css">
+</head>
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><img id="nexus_logo" alt="nexus logo" src="camera.png"></div>
+		<div id="site_name">NE<span id="x_span">X</span>US</div>
+		<div id="search_box">
+			<form action="/movie_page" method="POST">
+			<img alt="search" src="search.png" id="search_icon" class="open_search">
+				<input name="name" id="search_input" type="text">
+			</form>
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link">Top Films</a>
+		<a class="nav_link">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link">My Account</a>
+	</div>
+	
+	</header>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+<script>
+	$(document).ready(function() {
+		
+        $('#search_box').hover( 
+            function() {
+	
+                $('#search_input').animate({
+					width:'60%',
+					opacity: "70%"
+				}, 0.1);
+            },
+            function() { 
+                $('#search_input').delay(700).animate({
+					width:'0px',
+					opacity: "0%"
+				}, 0.1)
+            }
+        )
+    })
+</script>	
+
+	
+	
+</body>
+</html>

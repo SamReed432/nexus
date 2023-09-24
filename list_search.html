@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>User</title>
+	
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+
+<style>
+	h2 {
+		color:red;
+	}
+	h1 {
+		color: #3E54AC;
+		text-align: center;
+		margin-top: -30px;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 800;
+	}
+	
+	#main {
+		background-color: rgba(191,172,226,0.20);
+		margin-left: 5%;
+		margin-right: 5%;
+		margin-top: 3%;
+		display: flex;
+		flex-direction: column;
+	}
+	body {
+		background-color: #ECF2FF;;
+	}
+	h3 {
+		text-align: center;
+		font-size: 60px;
+		color: rgba(97,36,132,1.00);
+		padding-top: 30px;
+	}
+	
+	.poster {
+		display: flex;
+		align-content: left;
+		width: 10vw;
+		padding-left: 2%;
+		float: left;
+	}
+	
+	.movie_box {
+		width: 46%;
+		margin-left: 2%;
+		margin-right: 2%;
+		margin-top: 2%;
+		padding: 2%;
+		border: #3E54AC medium solid;
+		color: #3E54AC;
+		font-family: 'Montserrat', sans-serif;
+		font-family: 'Varela Round', sans-serif;
+	}
+	.movie_row {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.top_info {
+		display: block;
+		float: left;
+		flex-direction: row;
+		width: 100%;
+	}
+	
+	.name_num {
+		display: flex;
+		flex-direction: row;
+		float: left;
+	}
+	
+	.linfo {
+		display: flex;
+		flex-direction: column;
+		float: left;
+		width: 70%;
+	}
+	
+	
+
+	
+</style>
+
+<link rel="stylesheet" href="header_styles.css">
+
+</head>
+	
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><a href="/"><img id="nexus_logo" alt="nexus logo" src="camera.png"></a></div>
+		<a href="/"><div id="site_name">NE<span id="x_span">X</span>US</div></a>
+		<div id="search_box">
+			<form action="/movie_page" method="POST">
+			<img alt="search" src="search.png" id="search_icon" class="open_search">
+				<input name="name" id="search_input" type="text">
+			</form>
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link">Top Films</a>
+		<a class="nav_link">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link" href="/login">My Account</a>
+	</div>
+	
+</header>
+	
+<body>
+	<h3>NEXUS<br>Search Results</h3>
+	<h1 id="Mname">Movie_Ndsadzxcvame</h1>
+<div id="main">
+	
+
+<script>
+	
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	
+	const search = urlParams.get('query');
+	document.getElementById("Mname").innerHTML = "'" + search + "'";
+	if (search != null){
+		const url = 'http://localhost:3000/search_movies?search=' + search;
+		
+		
+		async function get_movie(){
+			const res = await fetch(url,
+							   {
+				method: 'GET',
+				query: search,
+				id: 0
+			})
+			const data = await res.json();
+			
+			for (let i = 0; i < 10; i++) {
+				var movie = await JSON.parse(data).results[i];
+				var img_url1 =  "https://image.tmdb.org/t/p/original" + await movie.poster_path;
+				
+				var title1 = await movie.title;
+				var id1 = await movie.id;
+				var release_date = await movie.release_date;
+				var overview = await movie.overview;
+				var id1 = await movie.id;
+					
+				i++;
+				var movie = await JSON.parse(data).results[i];
+				var img_url =  "https://image.tmdb.org/t/p/original" + await movie.poster_path;
+				
+				document.getElementById("main").innerHTML += ("<div class='movie_row'>" + 
+					"<a class='movie_box' mov_id='" + await id1  + "'><div class='top_info'><div class='linfo'>" + "<div class='name_num'><p class=num>"+ i +". </p>" +
+					"<p id=title" + i + ">&nbsp" + await title1 + "</p></div>" + 
+					"<p id=year" + i + ">Relase Date:" + await release_date + "</p></div>" + 
+					" <img  class=poster id=poster" + i + " src='" + img_url1 + "'></div>" + 
+					"</a>" + 
+					
+					 "<a class='movie_box' mov_id='" + await movie.id  + "'><div class='top_info'><div class='linfo'>" + "<div class='name_num'><p class=num>"+ (i + 1) +". </p>" +
+					"<p id=title" + (i + 1) + ">&nbsp" + await movie.title + "</p></div>" + 
+					"<p id=year" + (i + 1) + ">Relase Date:" + await movie.release_date + "</p></div>" + 
+					" <img  class=poster id=poster" + i + " src='" + img_url + "'></div>" + 
+					 "</a>" + "</div>");
+		}
+		
+		for	(i = 0; i < 10; i++) {
+					const url2 = 'http://localhost:3000/add_to_list';
+					document.getElementsByClassName('movie_box')[i].addEventListener("click", async function() {
+						console.log(this.attributes[1].value);
+		
+						const res = await fetch(url2,
+							   {
+						method: 'GET',
+						headers: {
+							mov_id: this.attributes[1].value,
+						}
+					})
+					
+						window.location.href = "http://localhost:3000/list_editor";
+					
+					});	
+		}
+	}
+		get_movie();
+		
+		
+	}
+</script>
+	</div>
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="header_script.js" type="text/javascript"></script>	
+</body>
+</html>

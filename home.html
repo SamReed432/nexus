@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:wght@500&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" href="header_styles.css">
+	<title>Nexus Movies</title>
+<style>
+	body {
+		font-family: 'Quicksand', sans-serif;
+		max-width: 100%;
+		overflow: scroll;
+	}	
+	
+	h1 {
+		color: rgba(109,31,125,0.64);
+		font-size: 6vw;
+		width: 40%;
+	}
+	
+	#box1 {
+		background-color: rgba(127,214,235,0.2);
+		display: flex;
+		justify-content: space-between;
+		padding: 10%;
+		padding-right: 3%;
+	}
+	
+	#box1 ol {
+		font-size: 2vw;
+		line-height: 7vw;
+	}
+	
+	#box2 {
+		background-color: rgba(100,38,116,0.21);
+		display: flex;
+		padding: 10%;
+		padding-right: 10%;
+	}
+	
+	h2 {
+		width: 60vw;
+		font-size: 4vw;
+	}
+	#box2 p {
+		padding-right: 10vw;
+		font-size: 2vw;
+	}
+	
+	#box3 {
+		background-color: rgba(4,148,92,0.27);
+		display: flex;
+		padding: 4%;
+		padding-right: 10%;
+		padding-left: 10%;
+		flex-direction: column;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		font-size: 3vw;
+		line-height: 5vw;
+	}
+	#box4 {
+		background-color: rgba(108,21,104,0.44);
+		display: flex;
+		padding: 4%;
+		padding-right: 10%;
+		padding-left: 10%;
+		justify-content: space-around;
+		align-content: center;
+		text-align: center;
+		font-size: 2vw;
+		line-height: 5vw;
+	}
+	
+	#box4 form {
+		display: flex;
+		justify-content: center;
+		align-content: center;
+	}
+	
+	#box4 form input {
+		height: 2vw;
+		margin-top: 1.4vw;
+	}
+	
+	
+
+	
+</style>
+</head>
+	
+<header>
+	<div id="nav_top_box">
+		<div id="logo_box"><a href="/"><img id="nexus_logo" alt="nexus logo" src="camera.png"></a></div>
+		<a href="/"><div id="site_name">NE<span id="x_span">X</span>US</div></a>
+		<div id="search_box">
+			<form action="/movie_page" method="POST">
+			<img alt="search" src="search.png" id="search_icon" class="open_search">
+				<input name="name" id="search_input" type="text">
+			</form>
+		</div>
+	</div>
+	<div id="nav_box">
+		
+		<a class="nav_link" href="/top_films">Top Films</a>
+		<a class="nav_link" href="/lists">Lists</a>
+		<a class="nav_link">Groups</a>
+		<a class="nav_link" href="/login">My Account</a>
+	</div>
+	
+</header>
+
+<body>
+
+<div id="box1">
+	<h1>Welcome to Nexus!</h1>
+
+	<ol>
+	<li>Sign Up or Login to a neXus account.</li>
+	<li>Find and Review Movies</li>
+	<li>Share your reviews and watchlist with friends!</li>
+	</ol>
+
+</div>
+<div id="box2">
+	<p>Other review sites are designed to do one thing:  Sell Tickets!  They are owned by the largest movie studios in the world and present misleading reviews.  Not Nexus.  At Nexus we use a unique 5 category rating system to give everyone quick and informative information on every film.</p>
+	<h2>Why Nexus?</h2>
+</div>
+
+<div id="box3">
+<h3>The 5 Nexus Categories</h3>
+
+Writing<br>
+Cinematography &amp; VFX<br>
+Acting<br>
+Enjoyment<br>
+Other
+
+</div>
+<div id="box4">
+<a href="/login">Login</a>
+	
+<form action="/movie_page" method="POST">
+	Search for Movies: &nbsp; &nbsp;<input type="text" name="name">&nbsp; &nbsp;
+	<input type="submit" value="Search">
+</form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="header_script.js" type="text/javascript"></script>	
+	
+</body>
+</html>
