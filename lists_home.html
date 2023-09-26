@@ -44,7 +44,7 @@
 	
 <script>
 	async function get_lists(){
-			url = 'http://localhost:3000/get_lists';
+			url = '/get_lists';
 			const res = await fetch(url,
 							   {
 				method: 'GET',
@@ -62,7 +62,7 @@
 	};
 	
 	async function get_title(list){
-		url = 'http://localhost:3000/get_listTitle';
+		url = '/get_listTitle';
 				const res = await fetch(url,
 							   {
 				method: 'GET',

@@ -140,7 +140,7 @@
 	var list_id = getQueryVariable('list_id');
 	
 	async function get_list_info (){
-		url = 'http://localhost:3000/get_list_info';
+		url = '/get_list_info';
 				const res = await fetch(url, {
 				method: 'GET',
 				headers: {
@@ -166,7 +166,7 @@
 	}
 	
 	async function get_movie(mov_num, num){
-			const url = 'http://localhost:3000/search_movies?id=' + mov_num;
+			const url = '/search_movies?id=' + mov_num;
 			const res = await fetch(url,
 							   {
 				method: 'GET',
@@ -209,7 +209,7 @@
 	
 	document.getElementById("saveChages").addEventListener("click", function() {
 		console.log("clicked");
-		var url = 'http://localhost:3000/update_list_info';
+		var url = '/update_list_info';
 		const res = fetch(url, {
 				method: 'GET',
 				headers: {
@@ -222,7 +222,7 @@
 	
 	function rem_button(id) {
 			console.log("called rem_buttoN");
-			const url = 'http://localhost:3000/rem_movToList';
+			const url = '/rem_movToList';
 			const res = fetch(url, {
 				mothod: 'POST',
 				headers: {
@@ -233,7 +233,7 @@
 	
 	function swap_button_up(id, dir) {
 			console.log("called Swap UP");
-			const url = 'http://localhost:3000/swap_list_order';
+			const url = '/swap_list_order';
 			const res = fetch(url, {
 				mothod: 'POST',
 				headers: {
@@ -249,7 +249,7 @@
 	
 	async function swap_button_down(id, dir) {
 			console.log("called Swap DOWN");
-			const url = 'http://localhost:3000/swap_list_order';
+			const url = '/swap_list_order';
 			const res = fetch(url, {
 				mothod: 'POST',
 				headers: {

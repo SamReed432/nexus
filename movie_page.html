@@ -128,7 +128,7 @@
 	const search = urlParams.get('query');
 	document.getElementById("Mname").innerHTML = "'" + search + "'";
 	if (search != null){
-		const url = 'http://localhost:3000/search_movies?search=' + search;
+		const url = '/search_movies?search=' + search;
 		
 		
 		async function get_movie(){

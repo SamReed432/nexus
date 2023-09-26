@@ -128,7 +128,7 @@
 	const search = urlParams.get('query');
 	document.getElementById("Mname").innerHTML = "'" + search + "'";
 	if (search != null){
-		const url = 'http://localhost:3000/search_movies?search=' + search;
+		const url = '/search_movies?search=' + search;
 		
 		
 		async function get_movie(){
@@ -169,7 +169,7 @@
 		}
 		
 		for	(i = 0; i < 10; i++) {
-					const url2 = 'http://localhost:3000/add_to_list';
+					const url2 = '/add_to_list';
 					document.getElementsByClassName('movie_box')[i].addEventListener("click", async function() {
 						console.log(this.attributes[1].value);
 		
@@ -181,7 +181,7 @@
 						}
 					})
 					
-						window.location.href = "http://localhost:3000/list_editor";
+						window.location.href = "/list_editor";
 					
 					});	
 		}

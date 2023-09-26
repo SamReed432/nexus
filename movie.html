@@ -270,7 +270,7 @@
 	if (id != null){
 		var url;
 		async function get_movie(){
-			url = 'http://localhost:3000/search_movies?id=' + id;
+			url = '/search_movies?id=' + id;
 			const res = await fetch(url,
 							   {
 				method: 'GET',
@@ -297,7 +297,7 @@
 	};
 		
 	async function get_reviews(){
-		url = 'http://localhost:3000/get_reviews?id=' + id;
+		url = '/get_reviews?id=' + id;
 		console.log('HERE');
 			const res = await fetch(url,
 							   {
@@ -322,7 +322,7 @@
 		
 			data.reviews.forEach(async id_num => {
 				console.log(id_num);
-					url = 'http://localhost:3000/get_review?id=' + id_num;
+					url = '/get_review?id=' + id_num;
 					const res2 = await fetch(url,
 								   {
 					method: 'GET',
