@@ -53,10 +53,8 @@
 
 			const data = await res.json();
 			if (data == null) return;
-			console.log(data);
 		
 			await data.forEach(list => {
-				console.log("List: " + list);
 				get_title(list);
 			});
 	};
@@ -69,12 +67,12 @@
 				headers: {
 					list_id: list,
 				}
-			});
+			}); 
 				list = await res.json();
-				console.log(list.title);
+				if (list.title == null) return;
 				document.getElementById('listlist').innerHTML += "<a href='/list_editor?list_id=" + await list._id + "'>" + await list.title + "<br>";
 	}
-	
+	 
 	get_lists();
 
 </script>

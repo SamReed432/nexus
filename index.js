@@ -221,29 +221,17 @@ app.get('/get_review', async (req, res) => {
 	});
 
 app.put('/add_review', (req, res) => {
-
-	var mycookie = req.headers.cookie;
-	console.log(mycookie);
-	if (mycookie === undefined){
-		res.body = "FAILURE";
-		res.send("yoyo");
-		return; 
-	}
 	
 	let cats = [0, parseFloat(req.body.cat1), parseFloat(req.body.cat2), parseFloat(req.body.cat3), parseFloat(req.body.cat4), parseFloat(req.body.cat5)];
 	
 	console.log("CATS: " + ((cats[1] + cats[2] + cats[3] + cats[4] + cats[5]) / 5));
 	
-	var cookieArray = mycookie.split('=');	
-	
-	console.log(req.body);
-	
-	const myUser = User.findOne({ username: cookieArray[1]});
+	const myUser = User.findOne({ username: req.cookies.user});
 	
 	var new_review = new Review ({
 		mov_id: req.body.movie_id,
 		body: req.body.description,
-		username: cookieArray[1],
+		username: req.cookies.user,
 		user_id: myUser._id,
 		profile_picture_path: myUser.profile_picture_path,
 		date: new Date,
@@ -254,7 +242,7 @@ app.put('/add_review', (req, res) => {
 			cat3: cats[3],
 			cat4: cats[4],
 			cat5: cats[5]
-	},
+		},
 	});
 	
 	var id = 0;
@@ -265,7 +253,7 @@ app.put('/add_review', (req, res) => {
 			console.log("add_failed");
 		} else {
 			id = "" + (document._id);
-			const myUser2 = User.findOne({ username: cookieArray[1]})
+			const myUser2 = User.findOne({ username: req.cookies.user})
 			.then (myUser2 => {
 				if(myUser2 == null){
 						console.log("user not found");
@@ -376,6 +364,7 @@ app.get('/get_listTitle', (req, res) => {
 				.then (myList => {
 					if (myList == null){
 						console.log("No List Found :(*");
+						res.json({});
 						return;
 					}
 					console.log(myList);
@@ -422,7 +411,7 @@ app.get('/get_list_info', (req, res) => {
 
 app.get('/update_list_info', (req, res) => {
 	
-	const myList = List.findOne({_id: req.headers.list_id})
+	const myList = List.findOne({_id: req.cookies.curr_list})
 	.then (myList => {
 		if (myList == null){
 			console.log("No List Found :(_");
@@ -431,6 +420,7 @@ app.get('/update_list_info', (req, res) => {
 		myList.title = req.headers.list_title;
 		myList.description = req.headers.list_description;
 		myList.save();
+		console.log("Saved List Updates!");
 		res.redirect('/lists');
 	});
 })
@@ -558,8 +548,6 @@ app.get('/swap_list_order', (req, res) => {
 			})
 })
 
-
-
 app.post('/movie_page', (req, res) => {
 	res.redirect("/movie_page?query=" + req.body.name);
 })
@@ -599,13 +587,6 @@ io.on('connection', (socket) => {
 	
 	
 })
-
-
-
-
 //***************** END SOCKET IO CODE ******************//
-
-
-
 
 //res.render('saved.ejs', {username: cookieArray[1], results: resultsIn});
