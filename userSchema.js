@@ -50,7 +50,6 @@ const listSchema = new Schema ({
 	date_updated: Date,
 	description: String,
 	movies: []
-	
 })
 
 const User = mongoose.model('user', userSchema);

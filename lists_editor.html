@@ -9,6 +9,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:wght@500&display=swap" rel="stylesheet"> 
 	<link rel="stylesheet" href="header_styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="jquery-ui-1.13.2.custom/jquery-ui.min.css">
+	<script src="jquery-ui-1.13.2.custom/external/jquery/jquery.js"></script>	
+	<script src="jquery-ui-1.13.2.custom/jquery-ui.min.js"></script>
 	<title>Nexus Movies</title>
 <style>
 	body {
@@ -32,11 +35,14 @@
 		margin-left: 5%;
 		margin-right: 5%;
 		margin-top: 3%;
+		margin-bottom: 5vw;
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 	body {
-		background-color: #ECF2FF;;
+		background-color: #ECF2FF;
+		text-align: center;
 	}
 	h3 {
 		text-align: center;
@@ -48,54 +54,57 @@
 	.poster {
 		display: flex;
 		align-content: left;
-		width: 5vw;
-		float: left;
+		width: 10vw;
 	}
 	
-	.movie_box {
-		width: 45%;
-		margin-left: 2%;
-		margin-right: 2%;
-		margin-top: 2%;
-		padding: 1vw;
-		border: #3E54AC medium solid;
-		color: #3E54AC;
-		font-family: 'Montserrat', sans-serif;
-		font-family: 'Varela Round', sans-serif;
-	}
 	.movie_row {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
+		align-items: center;
+		font-size: 1vw;
+		width: 10vw;
+		margin: 1vw;
 	}
 	
-	.top_info {
-		display: block;
-		float: left;
-		flex-direction: row;
+	.movie_box {
 		width: 100%;
-	}
-	
-	.name_num {
+		color: #3E54AC;
+		font-family: 'Montserrat', sans-serif;
+		font-family: 'Varela Round', sans-serif;
+		
 		display: flex;
-		flex-direction: row;
-		float: left;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
 	}
 	
 	.linfo {
 		display: flex;
 		flex-direction: column;
 		float: left;
-		width: 70%;
+		width: 100%;
 	}
 	
-	#arrows {
-		display: flex;
+	.linfo p {
+		display: inline;
+		height: 2vw;
+		width: 100%;
 		align-content: center;
-		align-items: center;
-		flex-direction: column;
 		justify-content: center;
-		font-size: 3vw;
+		text-align: center;
+		vertical-align: middle;
+	}
+	
+	.delete_button {
+		background-color: rgba(120,120,120,0.1);
+		border: none;
+		border-radius: 1vw;
+		padding: 0.5vw;
+	}
+	
+	#list_movie_search {
+		margin: 3vw;
 	}
 	
 </style>
@@ -121,19 +130,18 @@
 <body>
 <h1>Edit Your List:</h1>
 	
-<form>
+<form id="list_movie_search">
 	<label for="list_name">List Name:</label><input type="text" id="list_name">
 	<label for="list_description">List Description:</label><textarea type="textarea" id="list_description">	</textarea>
 	
 </form>
-<button id="saveChages"> Save Changes </button>
 	
 	<div id="search_list_box">
 			<form action="/list_search" method="POST">
-				<input name="name" id="search_input2" type="text">
+				<label for="search_input2">Search for Films to Add to List:</label><input name="name" id="search_input2" type="text">
 			</form>
 		</div>
-	
+	<p>Drag to Reorder!</p>
 	<div id="films"></div>
 	
 <script>
@@ -156,6 +164,25 @@
 		for (var i = 0; i < list.movies.length; i++){
 			await addMovie(list.movies[i], i);
 		}
+		
+		$(function() {
+			$("#films").sortable({
+				update: function(event, ui) {
+					var ids = [];
+					$(".movie_row").each(function(index) {
+						ids.push($(this).attr("id"));
+					})
+					const url = '/swap_list_order';
+					const res = fetch(url, {
+						mothod: 'POST',
+						headers: {
+							id_list: JSON.stringify(ids)
+						}
+					});
+					console.log(ids);
+				}
+			})
+		})
 		
 		
 		
@@ -181,14 +208,14 @@
 				var overview = await movie.overview;
 				var id1 = await movie.id;
 		
-				document.getElementById("films").innerHTML += "<div class='movie_row' css='order:" + num + 1 + "'>" + 
-					"<a class='movie_box'><div class='top_info'><div class='linfo'>" + "<div class='name_num'>" +
-					"<p>&nbsp" + await title1 + "</p></div>" + 
-					"<p>Relase Date:" + await release_date + "</p></div>" + 
-					" <img class='poster' src='" + img_url1 + "'></div>" + "<button onclick= 'rem_button(" + id1 + ")' class='delete_button'>DELETE</button>" +
-					"</a><div id='arrows'><span onclick='swap_button_up(" + id1 + ")' id='up_arrow'>&#8593;</span><span onclick='swap_button_down(" + id1 + ")' id='down_arrow'>&#8595;</span></div></div>";
-		
-	
+				document.getElementById("films").innerHTML += "<div class='movie_row' css='order:" + num + 1 + "' id='" + id1 + "'>" + 
+					"<a class='movie_box'>" + 
+						"<div class='linfo'>" +
+							" <img class='poster' src='" + img_url1 + "'>"+ 
+							"<p>&nbsp" + await title1 + "</p>" +
+							"<button onclick= 'rem_button(" + id1 + ")' class='delete_button'>DELETE</button>" +
+						"</div>" + 
+					"</a></div>";
 	}
 	
 	
@@ -207,21 +234,8 @@
 	
 	get_list_info();
 	
-	document.getElementById("saveChages").addEventListener("click", function() {
-		console.log("clicked");
-		var url = '/update_list_info';
-		const res = fetch(url, {
-				method: 'GET',
-				headers: {
-					list_id: list_id,
-					list_title: document.getElementById('list_name').value,
-					list_description: document.getElementById('list_description').value,
-				}
-			})
-	});
-	
 	function rem_button(id) {
-			console.log("called rem_buttoN");
+		    document.getElementById(id).style.display = "none";
 			const url = '/rem_movToList';
 			const res = fetch(url, {
 				mothod: 'POST',
@@ -231,44 +245,29 @@
 			})
 	};
 	
-	function swap_button_up(id, dir) {
-			console.log("called Swap UP");
-			const url = '/swap_list_order';
-			const res = fetch(url, {
-				mothod: 'POST',
+	document.getElementById("list_name").addEventListener("change", function(element){
+		var url = '/update_list_info';
+		const res = fetch(url, {
+				method: 'GET',
 				headers: {
-					mov_id: id,
-					direction: "up",
+					list_id: list_id,
+					list_title: document.getElementById('list_name').value,
+					list_description: document.getElementById('list_description').value,
 				}
-			});
-		sleep(50).then (() => {
-			document.getElementById("films").innerHTML = "";
-			get_list_info();	
-		});
-	};
+			})
+	})
 	
-	async function swap_button_down(id, dir) {
-			console.log("called Swap DOWN");
-			const url = '/swap_list_order';
-			const res = fetch(url, {
-				mothod: 'POST',
+	document.getElementById("list_description").addEventListener("change", function(element){
+		var url = '/update_list_info';
+		const res = fetch(url, {
+				method: 'GET',
 				headers: {
-					mov_id: id,
-					direction: "down",
+					list_id: list_id,
+					list_title: document.getElementById('list_name').value,
+					list_description: document.getElementById('list_description').value,
 				}
-			});
-		sleep(50).then (() => {
-			document.getElementById("films").innerHTML = "";
-			get_list_info();	
-		});
-	};
-	
-	function sleep(ms) {
-  		return new Promise(resolve => setTimeout(resolve, ms));
-	}
-
-
-	
+			})
+	})
 	
 </script>
 	

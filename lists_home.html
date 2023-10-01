@@ -14,7 +14,54 @@
 		font-family: 'Quicksand', sans-serif;
 		max-width: 100%;
 		overflow: scroll;
+		background-image: linear-gradient(to right, rgba(233, 15, 111, 20%) , rgba(110, 100, 225, 16%));
 	}
+	
+	.list_item {
+		color: black;
+		text-decoration: none;
+		border: rgba(0,0,0,1.00) solid medium;
+		border-radius: 1vw;
+		margin: 1vw;
+		padding: 1vw;
+		width: 20vw;
+		
+		transition: 0.5s;
+	}
+	
+	.list_item:hover {
+		background-image: linear-gradient(to right, #7CB9E8 , #c09cfa);
+	}
+	
+	#listlist {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-size: 1.5vw;
+		
+		margin: 1vw;
+	}
+	
+	h1 {
+		text-align: center;
+		width: 100%;
+		
+	}
+	
+	#new_list_button {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		background-image: linear-gradient(to right, #7CB9E8 , #c09cfa);
+		color: white;
+		font-size: 1.5vw;
+	}
+	
 </style>
 </head>
 	
@@ -36,9 +83,9 @@
 </header>
 
 <body>
-<h1>User's Lists:</h1>
+<h1>Your Lists:</h1>
 	
-<a id="new_list_button" href="/new_list">Add A New List!</a>
+<a id="new_list_button" href="/new_list"><p>Add A New List!</p></a>
 	
 <div id="listlist"></div>
 	
@@ -70,7 +117,7 @@
 			}); 
 				list = await res.json();
 				if (list.title == null) return;
-				document.getElementById('listlist').innerHTML += "<a href='/list_editor?list_id=" + await list._id + "'>" + await list.title + "<br>";
+				document.getElementById('listlist').innerHTML += "<a class='list_item' href='/list_editor?list_id=" + await list._id + "'>" + await list.title + "<br>";
 	}
 	 
 	get_lists();

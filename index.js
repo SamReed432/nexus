@@ -60,9 +60,20 @@ app.get('/', function(req, res){
 	res.sendFile(__dirname + '/home.html');
 })
 
+function force_login(req, res){
+	if (req.cookies == null || req.cookies.logged_in == null){
+		res.redirect('/login');
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 //Chat Page
 app.get('/chat', function(req, res){
-	res.sendFile(__dirname + '/chat.html');
+	if(force_login(req, res) == 0){
+		res.sendFile(__dirname + '/chat.html');	
+	}	
 })
 
 
@@ -74,7 +85,6 @@ app.get('/signUp', function(req, res){
 
 //SIGN UP ADD TO DATABASE
 app.post('/newUser', (req, res) => {
-	console.log(req.body); 
 	if(req.body.password == ''){
 		res.redirect('/signUp?taken=true');
 		return;
@@ -89,12 +99,13 @@ app.post('/newUser', (req, res) => {
 	userIn.save(function (error, document) {
 		if (error) console.log(error);
 		if(document == undefined){
-			res.redirect('/signUp?taken=true') 
+			res.redirect('/signUp?taken=true');
 		} else {
 			res.cookie("user", req.body.username);
+			res.cookie("logged_in", true);
 			res.redirect('/');
 		}
-	})
+	}) 
 })
 
 //LOGIN FOR EXISTING USER
@@ -111,7 +122,7 @@ app.post('/loginCheck', (req, res) => {
 			res.redirect('/login?taken=true')
 		}else if(req.body.password == userIn.password){
 			res.cookie("user", req.body.username);
-			console.log("Logged In Successfully");
+			res.cookie("logged_in", true);
 			res.redirect('/');
 		} else {
 			console.log("login failed")
@@ -167,10 +178,8 @@ app.get('/top_films', (req,res) => {
 app.get('/get_top_films', (req, res) => {
 	console.log(req.query.id);
 	if (req.query.id == "tv") {
-		console.log("TV");
 		var query_string = 'https://api.themoviedb.org/3/tv/popular?language=en-US&sort_by=popularity.desc&with_origin_country=US&api_key=011002260fff189303f2786eca5598b0&page=1';
 	} else {
-		console.log("MOVIE");
 		var query_string = 'https://api.themoviedb.org/3/movie/popular?api_key=011002260fff189303f2786eca5598b0&language=en&origin_country=US';
 	}
 	https.get(query_string, (resp)=> {
@@ -205,7 +214,6 @@ app.get('/get_reviews', async (req, res) => {
 	})
 
 app.get('/get_review', async (req, res) => {
-	console.log(req.query.id);	
 	var ObjectId = require('mongodb').ObjectId; 
 	var id = req.query.id;       
 	var o_id = new ObjectId(id);
@@ -221,10 +229,10 @@ app.get('/get_review', async (req, res) => {
 	});
 
 app.put('/add_review', (req, res) => {
-	
+	if(force_login(req, res) == 1){
+		return;	
+	}
 	let cats = [0, parseFloat(req.body.cat1), parseFloat(req.body.cat2), parseFloat(req.body.cat3), parseFloat(req.body.cat4), parseFloat(req.body.cat5)];
-	
-	console.log("CATS: " + ((cats[1] + cats[2] + cats[3] + cats[4] + cats[5]) / 5));
 	
 	const myUser = User.findOne({ username: req.cookies.user});
 	
@@ -260,22 +268,17 @@ app.put('/add_review', (req, res) => {
 				} else {
 					myUser2.reviews.push(id);
 					myUser2.save();
-					console.log("added review to user");
 				}
 			})
 
 			curr_id = parseInt(req.body.movie_id);
-			console.log("Curr Id:" + curr_id);
 			const curr_movie = Movie.findOne({movie_id: curr_id})
 				.then (curr_movie => {
 					if(curr_movie == null){
 							console.log("no movie found");
 					}else  {
-						console.log("Movie found on mongo");
 						curr_movie.reviews.push(id);
 						let num_revs = curr_movie.num_reviews;
-						
-						console.log("curr cat1:" + curr_movie.average_cats.cat1 + " num_revs: " + num_revs + "  body.cat1: " + cats[1]);
 						
 						curr_movie.average_cats.cat1 = ((curr_movie.average_cats.cat1 * num_revs) + cats[1])/(num_revs + 1);
 						
@@ -288,8 +291,6 @@ app.put('/add_review', (req, res) => {
 						
 						
 						curr_movie.stars = (curr_movie.average_cats.cat1 + curr_movie.average_cats.cat2 + curr_movie.average_cats.cat3 + curr_movie.average_cats.cat4 + curr_movie.average_cats.cat5) / 5;
-						
-						console.log(curr_movie); 
 						 
 						curr_movie.save();
 					}
@@ -328,7 +329,6 @@ app.get('/movie', (req, res) => {
 		if(document == undefined){
 			console.log("add failed");
 		} else {
-			console.log("add worked");
 		}
 	})
 		}
@@ -339,7 +339,9 @@ app.get('/movie', (req, res) => {
 /*********  LIST METHODS  ************/
 
 app.get('/lists', (req, res) => {
-	res.sendFile(__dirname + '/lists_home.html')
+	if(force_login(req, res) == 0){
+		res.sendFile(__dirname + '/lists_home.html');	
+	}
 })
 
 app.get('/get_lists', (req, res) => {
@@ -367,7 +369,6 @@ app.get('/get_listTitle', (req, res) => {
 						res.json({});
 						return;
 					}
-					console.log(myList);
 					res.json(myList);
 				})
 			}
@@ -385,10 +386,8 @@ app.get('/add_to_list', (req, res) => {
 					if(currList == null){
 						console.log("List Not Found");
 					} else {
-						console.log(currList);
 						currList.movies.push(req.headers.mov_id);
 						currList.save();
-						console.log("Mov added to list!");
 						res.end();
 			}
 		});
@@ -404,7 +403,6 @@ app.get('/get_list_info', (req, res) => {
 			console.log("No List Found :(");
 			return;
 		} 
-		console.log(myList);
 		res.json(myList);
 	});
 })
@@ -420,7 +418,6 @@ app.get('/update_list_info', (req, res) => {
 		myList.title = req.headers.list_title;
 		myList.description = req.headers.list_description;
 		myList.save();
-		console.log("Saved List Updates!");
 		res.redirect('/lists');
 	});
 })
@@ -454,8 +451,6 @@ app.get('/new_list', (req, res) => {
 			return;
 		}
 		
-		console.log(myUser);
-	
 		const newList = new List({
 			title: "My New List"
 		});
@@ -514,7 +509,6 @@ app.get('/rem_movToList', (req, res) => {
 				} else {
 					myList.movies = myList.movies.filter(item => item != req.headers.mov_id);
 					myList.save();
-					console.log("removed mov from list");
 				}
 			})
 })
@@ -523,26 +517,11 @@ app.get('/rem_movToList', (req, res) => {
 app.get('/swap_list_order', (req, res) => {
 	const myList = List.findOne({_id: req.cookies.curr_list})
 			.then (myList => {
-				console.log(myList.movies);
 				if(myList == null){
 					console.log("List not found");
 				} else {
-					index = myList.movies.indexOf(req.headers.mov_id);
-					var temp;
-					console.log("direction: " + req.headers.direction);
-					if(req.headers.direction == "up"){
-						if (index == 0) return;
-						temp = myList.movies[index - 1];
-						myList.movies[index - 1] = req.headers.mov_id;
-					} else {
-						if (index == (myList.movies.length - 1)){return};
-						temp = myList.movies[index + 1];
-						myList.movies[index + 1] = req.headers.mov_id;
-					}
-					myList.movies[index] = temp;
-					console.log(myList.movies);
+					myList.movies = JSON.parse(req.headers.id_list);
 					myList.save();
-					console.log("Swapped List Order!");
 					res.send;
 				}
 			})
